@@ -117,7 +117,7 @@ export default function FableNavbar() {
                 className="bg-[#b36b6b] text-white"
                 radius="full"
               >
-                <Link href="/signup">Register</Link>
+                <Link href="/signup" className={'text-white'}>Register</Link>
               </Button>
             </>
           )}
