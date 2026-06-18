@@ -68,10 +68,10 @@ export default function FableNavbar() {
               <Link
                 href={link.href}
                 onClick={() => handleLinkClick(link.name)}
-                className={`text-lg font-medium transition-colors relative py-1 block after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-[#b36b6b] after:transition-transform after:duration-200 ${
+                className={`text-lg font-medium transition-colors relative py-1 block after:w-full after:bg-[#b36b6b] after:duration-200 ${
                   activeRoute === link.name
-                    ? "text-[#b36b6b] font-semibold after:scale-x-100"
-                    : "text-foreground/80 hover:text-[#b36b6b] after:scale-x-0 hover:after:scale-x-100"
+                    ? "text-[#b36b6b] font-semibold"
+                    : ""
                 }`}
               >
                 {link.name}

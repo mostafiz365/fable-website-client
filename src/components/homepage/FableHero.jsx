@@ -21,7 +21,7 @@ export default function FableHero() {
       subtitle: "Welcome to Fable Platform",
       desc: "We deliver digital books all over the world. Explore 10,000+ curated premium ebooks, academic papers, and indie novels in one unified shared environment.",
       cta: "Explore More",
-      image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=1000&auto=format&fit=crop", // ক্লাসিক বুক সেলফ ও ওপেন বুক আর্ট
+      image: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=1000&auto=format&fit=crop", // ক্লাসিক বুক সেলফ ও ওপেন বুক আর্ট
     },
     {
       id: 2,
