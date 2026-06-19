@@ -1,9 +1,9 @@
 import BookCard from '@/components/BookCard';
-import { getBooks } from '@/lib/api/books';
+import { getPublishedBooks } from '@/lib/api/books';
 import React from 'react';
 
 const AddEbookHomePage = async () => {
-    const books = await getBooks() || [];
+    const books = await getPublishedBooks() || [];
     console.log(books);
 
     

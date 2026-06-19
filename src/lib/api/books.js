@@ -1,7 +1,12 @@
 import { serverFetch } from "../core/server";
 
 
-export const getBooks = async() =>{
+// export const getBooks = async() =>{
+//     return serverFetch('/api/books');
+// }
+
+// এই ফাংশনটি কল করলেই এখন ব্যাকএন্ড থেকে শুধুমাত্র পাবলিশড বইগুলো চলে আসবে
+export const getPublishedBooks = async () => {
     return serverFetch('/api/books');
 }
 

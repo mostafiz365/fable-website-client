@@ -83,6 +83,7 @@ export default function AddEbookForm({ user }) {
                 coverImage: coverImageUrl,
                 userId: user.id,
                 writerName: user.name,
+                status: "unpublished",
                 createdAt: new Date()
             };
 
