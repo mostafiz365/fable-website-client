@@ -3,8 +3,9 @@ import { getBookmarkByUserId } from "@/lib/api/bookmark";
 import { getUserSession } from "@/lib/core/session";
 import { Bookmark, FolderHeart } from "lucide-react"; // আইকন ব্যবহারের জন্য
 
-const BookmarkPage = async () => {
+const ReaderBookmarkPage = async () => {
     const user = await getUserSession();
+    console.log(user);
     // ডাটা না থাকলে যেন ক্র্যাশ না করে সেজন্য একটি ডিফল্ট খালি অ্যারে রাখলাম
     const books = (await getBookmarkByUserId(user?.id)) || [];
 
@@ -59,4 +60,4 @@ const BookmarkPage = async () => {
     );
 };
 
-export default BookmarkPage;
+export default ReaderBookmarkPage;

@@ -5,9 +5,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Card, Button, Tooltip } from "@heroui/react";
 import { User, DollarSign, Calendar, Tag, ShieldCheck, Bookmark, BookmarkCheck, ShoppingCart, Lock, ArrowUpRight } from "lucide-react";
+import { saveBookmark } from '@/lib/actions/bookmark';
 
 export default function EbookDetailsClient({ book, currentUser }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
+  // console.log(currentUser, book);
 //   const [purchasing, setPurchasing] = useState(false);
 
   const {
@@ -32,10 +34,34 @@ export default function EbookDetailsClient({ book, currentUser }) {
   const isWriter = currentUser && currentUser.id === writerId;
   const hasPurchased = currentUser && purchasedUsers.includes(currentUser.id);
 
+
+  const bookmarkData = {
+    bookId: book._id || book.id, // বইয়ের আইডি আলাদা করে রাখা হলো
+    title: book.title,
+    writerName: book.writerName,
+    price: book.price,
+    coverImage: book.coverImage,
+    genre: book.genre,
+    userId: currentUser?.id       // কোন ইউজার বুকমার্ক করছে তার আইডি
+  };
+    console.log(bookmarkData);
+
   // ১. বুকমার্ক টগল হ্যান্ডলার
-  const handleBookmark = () => {
-    setIsBookmarked(!isBookmarked);
-    // এখানে আপনার বুকমার্ক সেভ করার API কল যোগ করতে পারেন
+  const handleBookmark = async () => {
+    if (!isLoggedIn) {
+      alert("Please login to bookmark this book!");
+      return;
+    }
+    
+    setIsBookmarked(!isBookmarked); // ইউজার ইন্টারফেস সাথে সাথে আপডেট
+    
+    try {
+      const bookmark = await saveBookmark(bookmarkData);
+      alert("Bookmarked successfully");
+    } catch (error) {
+      console.error("Bookmark saving failed:", error);
+      setIsBookmarked(false); // এরর হলে স্টেট আগের অবস্থায় ফিরিয়ে নেওয়া
+    }
   };
 
   // ২. স্ট্রাইপ চেকআউট হ্যান্ডলার
