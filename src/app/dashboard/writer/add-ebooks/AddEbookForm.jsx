@@ -18,8 +18,6 @@ export default function AddEbookForm({ user }) {
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState("");
 
-    console.log(user)
-
     // ইমেজ সিলেক্ট এবং প্রিভিউ হ্যান্ডলার
     const handleImageChange = (e) => {
         const file = e.target.files[0];

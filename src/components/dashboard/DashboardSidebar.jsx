@@ -65,7 +65,7 @@ export async function DashboardSidebar() {
 
             <div className="mt-auto px-3 py-2">
                 <div className="rounded-xl bg-[#b36b6b]/5 p-3.5 border border-[#ecd5cf]/40 text-center">
-                    <p className="text-xs font-serif italic text-[#2c3e50]/80">"Ocean Of Book"</p>
+                    <p className="text-xs font-serif italic text-[#2c3e50]/80">Ocean Of Book</p>
                 </div>
             </div>
         </div>
