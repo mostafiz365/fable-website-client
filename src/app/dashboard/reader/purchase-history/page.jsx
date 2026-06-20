@@ -48,7 +48,7 @@ const PurchaseHistoryPage = async () => {
             <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
               Books Purchased
             </span>
-            <h3 className="text-3xl md:text-4xl font-serif font-black text-[#2c3e50] group-hover:text-[#b36b6b] transition-colors">
+            <h3 className="text-3xl md:text-4xl font-serif font-black text-[#b36b6b] group-hover:text-[#b36b6b] transition-colors">
               {totalPurchasedCount} <span className="text-sm font-sans font-medium text-gray-400">Ebooks</span>
             </h3>
           </div>
