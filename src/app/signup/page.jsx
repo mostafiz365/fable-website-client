@@ -13,10 +13,15 @@ import {
   TextField,
 } from "@heroui/react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 
 const SignUpPage = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("callbackUrl") || "/";
+
+
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -33,7 +38,7 @@ const SignUpPage = () => {
     console.log({ data, error });
     if (data) {
       //   toast.success('Signup Successfully!'),
-      redirect("/");
+      router.push(redirectTo);
     }
     if (error) {
       // toast.error(error.message);
@@ -218,7 +223,7 @@ const SignUpPage = () => {
           <p className="text-center text-sm text-gray-500 mt-6">
             Already have an account?{" "}
             <Link
-              href="/login"
+              href={`/signin?callbackUrl=${redirectTo}`}
               className="font-semibold text-[#b36b6b] hover:underline"
             >
               Log In

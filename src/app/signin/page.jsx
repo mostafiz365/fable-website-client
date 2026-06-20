@@ -2,10 +2,15 @@
 import { authClient } from "@/lib/auth-client";
 import { Button, Card, Description, FieldError, Form, Input, Label, TextField } from "@heroui/react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
 
 const SignInPage = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("callbackUrl") || "/";
+
+
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -20,7 +25,7 @@ const SignInPage = () => {
         console.log({ data, error });
         if (data) {
             // toast.success('Login Successfully!');
-            redirect('/');
+            router.push(redirectTo);
         }
         if (error) {
             // toast.error(error.message);
@@ -131,7 +136,7 @@ const SignInPage = () => {
                     {/* Signup Redirect Link */}
                     <p className="text-center text-sm text-gray-500 mt-6">
                         Do not have an account?{" "}
-                        <Link href="/signup" className="font-semibold text-[#b36b6b] hover:underline">
+                        <Link href={`/signup?callbackUrl=${redirectTo}`} className="font-semibold text-[#b36b6b] hover:underline">
                             Register Now
                         </Link>
                     </p>

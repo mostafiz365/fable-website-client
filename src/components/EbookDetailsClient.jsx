@@ -1,103 +1,94 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import { Card, Button, Tooltip } from "@heroui/react";
-import { User, DollarSign, Calendar, Tag, ShieldCheck, Bookmark, BookmarkCheck, ShoppingCart, Lock, ArrowUpRight } from "lucide-react";
-import { saveBookmark } from '@/lib/actions/bookmark';
+import {
+  User,
+  DollarSign,
+  Calendar,
+  Tag,
+  ShieldCheck,
+  Bookmark,
+  BookmarkCheck,
+  ShoppingCart,
+  Lock,
+  ArrowUpRight,
+} from "lucide-react";
+import { saveBookmark } from "@/lib/actions/bookmark";
 
 export default function EbookDetailsClient({ book, currentUser }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
-  // console.log(currentUser, book);
-//   const [purchasing, setPurchasing] = useState(false);
+  
 
+  // আপনার ডাটাবেজ স্ট্রাকচার অনুযায়ী ফিল্ডগুলো নেওয়া হলো
   const {
-    id,
     _id,
+    id,
     title = "Untitled Ebook",
     writerName = "Unknown Author",
-    writerId = "", // রাইটারের আইডি (ডিজেবল লজিকের জন্য)
+    userId: bookWriterId = "", // আপনার দেওয়া ডাটা অনুযায়ী এই userId-ই হলো লেখকের আইডি
     price = 0,
     coverImage = "",
     description = "",
     genre = "General",
     sold = false,
     createdAt,
-    purchasedUsers = [] // যারা ইতিমধ্যে কিনেছে তাদের আইডি লিস্ট
+    purchasedUsers = [], // ইতিমধ্যে যারা পারচেজ করেছে তাদের আইডি অ্যারে
   } = book || {};
 
   const bookId = _id || id;
-
-  // রিকোয়ারমেন্ট লজিকসমূহ:
   const isLoggedIn = !!currentUser;
-  const isWriter = currentUser && currentUser.id === writerId;
-  const hasPurchased = currentUser && purchasedUsers.includes(currentUser.id);
 
+  // ১. চেক করা হচ্ছে কারেন্ট লগইন থাকা ইউজার নিজেই এই বইয়ের লেখক কিনা
+  const isWriter =
+    currentUser &&
+    bookWriterId &&
+    String(currentUser.id) === String(bookWriterId);
 
+  // ②. চেক করা হচ্ছে কারেন্ট ইউজার অলরেডি বইটি কিনেছে কিনা
+  const hasPurchased =
+    currentUser && purchasedUsers.map(String).includes(String(currentUser.id));
+
+  // বুকমার্ক ডাটা অবজেক্ট (আপনার এক্সিস্টিং লজিক)
   const bookmarkData = {
-    bookId: book._id || book.id, // বইয়ের আইডি আলাদা করে রাখা হলো
-    title: book.title,
-    writerName: book.writerName,
-    price: book.price,
-    coverImage: book.coverImage,
-    genre: book.genre,
-    userId: currentUser?.id       // কোন ইউজার বুকমার্ক করছে তার আইডি
+    bookId: bookId,
+    title,
+    writerName,
+    price,
+    coverImage,
+    genre,
+    userId: currentUser?.id,
   };
-    console.log(bookmarkData);
 
-  // ১. বুকমার্ক টগল হ্যান্ডলার
   const handleBookmark = async () => {
     if (!isLoggedIn) {
       alert("Please login to bookmark this book!");
       return;
     }
-    
-    setIsBookmarked(!isBookmarked); // ইউজার ইন্টারফেস সাথে সাথে আপডেট
-    
+
+    setIsBookmarked(!isBookmarked);
+
     try {
-      const bookmark = await saveBookmark(bookmarkData);
+      await saveBookmark(bookmarkData);
       alert("Bookmarked successfully");
     } catch (error) {
       console.error("Bookmark saving failed:", error);
-      setIsBookmarked(false); // এরর হলে স্টেট আগের অবস্থায় ফিরিয়ে নেওয়া
+      setIsBookmarked(false);
     }
   };
 
-  // ২. স্ট্রাইপ চেকআউট হ্যান্ডলার
-//   const handlePurchase = async () => {
-//     if (!isLoggedIn) {
-//       // লগইন না থাকলে সাইন-ইন পেজে রিডাইরেক্ট করবে
-//       window.location.href = `/signin?callbackUrl=/ebooks/${bookId}`;
-//       return;
-//     }
-    
-//     setPurchasing(true);
-//     try {
-//       // আপনার স্ট্রাইপ রাউটে রিকোয়েস্ট পাঠানো
-//       const res = await fetch('/api/checkout/stripe', {
-//         method: 'POST',
-//         headers: { 'Content-Type': 'application/json' },
-//         body: JSON.stringify({ bookId })
-//       });
-//       const data = await res.json();
-//       if (data.url) {
-//         window.location.href = data.url; // স্ট্রাইপ গেটওয়েতে রিডাইরেকশন
-//       }
-//     } catch (err) {
-//       console.error("Stripe integration error:", err);
-//     } finally {
-//       setPurchasing(false);
-//     }
-//   };
-
-  const formattedDate = createdAt ? new Date(createdAt).toLocaleDateString('en-US', {
-    day: 'numeric', month: 'short', year: 'numeric'
-  }) : "Recent Upload";
+  const formattedDate = createdAt
+    ? new Date(createdAt).toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      })
+    : "Recent Upload";
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-      
       {/* ================= LEFT: HIGH-RES COVER IMAGE ================= */}
       <div className="md:col-span-4 sticky top-24">
         <div className="relative aspect-[3/4] w-full rounded-[32px] overflow-hidden border border-[#ecd5cf]/60 shadow-md group bg-[#2c3e50]/5">
@@ -110,14 +101,17 @@ export default function EbookDetailsClient({ book, currentUser }) {
               className="object-cover group-hover:scale-102 transition-transform duration-500"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400 italic">No Cover Image</div>
+            <div className="w-full h-full flex items-center justify-center text-gray-400 italic">
+              No Cover Image
+            </div>
           )}
 
-          {/* আ্যভেইলেবল নাকি সোল্ড স্ট্যাটাস ব্যাজ */}
-          <span className={`absolute top-5 left-5 z-10 text-[11px] font-bold tracking-wider px-3 py-1 rounded-full uppercase shadow-sm ${
-            sold ? 'bg-[#2c3e50] text-white' : 'bg-emerald-600 text-white'
-          }`}>
-            {sold ? 'Sold Out' : 'Available'}
+          <span
+            className={`absolute top-5 left-5 z-10 text-[11px] font-bold tracking-wider px-3 py-1 rounded-full uppercase shadow-sm ${
+              sold ? "bg-[#2c3e50] text-white" : "bg-emerald-600 text-white"
+            }`}
+          >
+            {sold ? "Sold Out" : "Available"}
           </span>
         </div>
       </div>
@@ -125,39 +119,47 @@ export default function EbookDetailsClient({ book, currentUser }) {
       {/* ================= RIGHT: HERO UI COMPOUND CARD DETAILS ================= */}
       <div className="md:col-span-8">
         <Card className="w-full bg-white border border-[#ecd5cf]/40 rounded-[32px] p-2 shadow-sm">
-          
-          {/* ১. Card.Header: রাইটার মেটা ও বুকমার্ক অ্যাকশন */}
+          {/* ১. Card.Header */}
           <Card.Header className="px-6 pt-6 pb-2 flex items-center justify-between">
             <div className="space-y-1">
-              {/* রাইটারের নামের ক্লিকএবল লিংক */}
-              <Link 
-                href={'/dashboard/writer'} 
+              <Link
+                href={"/dashboard/writer"}
                 className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#b36b6b] hover:text-[#2c3e50] transition-colors group"
               >
                 <User size={20} />
-                <span className='text-2xl font-semibold'>By {writerName}</span>
-                <ArrowUpRight size={20} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                <span className="text-2xl font-semibold">By {writerName}</span>
+                <ArrowUpRight
+                  size={20}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                />
               </Link>
-              
+
               <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 pt-1">
-                <span className="flex items-center gap-1"><Tag size={13} /> {genre}</span>
-                <span className="flex items-center gap-1"><Calendar size={13} /> {formattedDate}</span>
+                <span className="flex items-center gap-1">
+                  <Tag size={13} /> {genre}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Calendar size={13} /> {formattedDate}
+                </span>
               </div>
             </div>
 
-            {/* বুকমার্ক বাটন */}
             <Button
               isIconOnly
               variant="light"
               radius="full"
               onClick={handleBookmark}
-              className={`hover:bg-[#b36b6b]/10 ${isBookmarked ? 'text-[#b36b6b]' : 'text-gray-400'}`}
+              className={`hover:bg-[#b36b6b]/10 ${isBookmarked ? "text-[#b36b6b]" : "text-gray-400"}`}
             >
-              {isBookmarked ? <BookmarkCheck size={26} className="fill-current" /> : <Bookmark size={26} />}
+              {isBookmarked ? (
+                <BookmarkCheck size={26} className="fill-current" />
+              ) : (
+                <Bookmark size={26} />
+              )}
             </Button>
           </Card.Header>
 
-          {/* ২. Card.Content: টাইটেল ও কনটেন্ট প্রিভিউ */}
+          {/* ২. Card.Content */}
           <Card.Content className="px-6 py-4 space-y-6">
             <div className="space-y-2">
               <Card.Title className="text-3xl md:text-4xl font-serif font-bold text-[#2c3e50] leading-tight">
@@ -168,72 +170,441 @@ export default function EbookDetailsClient({ book, currentUser }) {
               </Card.Description>
             </div>
 
-            {/* বইয়ের ডেসক্রিপশন / প্রিভিউ */}
             <div className="space-y-2">
-              <h4 className="text-sm font-bold uppercase tracking-wider text-[#2c3e50]/70">Preview Description</h4>
+              <h4 className="text-sm font-bold uppercase tracking-wider text-[#2c3e50]/70">
+                Preview Description
+              </h4>
               <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line bg-[#fbf4f2]/30 p-4 rounded-2xl border border-[#ecd5cf]/20">
                 {description || "No description provided for this ebook."}
               </p>
             </div>
 
-            {/* প্রটেক্টেড ফুল কনটেন্ট সেকশন (শুধু পারচেজ করার পর আনলক হবে) */}
+            {/* কন্ডিশনাল সিক্রেট কন্টেন্ট লক/আনলক লজিক */}
             <div className="border border-dashed border-[#ecd5cf] rounded-2xl p-5 bg-[#fbf4f2]/10 relative overflow-hidden">
               {hasPurchased || isWriter ? (
                 <div className="space-y-2 animate-fadeIn">
-                  <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">Unlocked Content</span>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    ✨ এখানে আপনার ইবুকের আসল এবং সম্পূর্ণ সিক্রেট পড়ার লিংক অথবা মূল ফাইল ডাউনলোড করার অপশনটি লোড হয়ে গেছে!
+                  <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">
+                    Unlocked Content
+                  </span>
+                  <p className="text-sm text-gray-700 leading-relaxed font-medium">
+                    ✨ এখানে আপনার ইবুকের আসল এবং সম্পূর্ণ সিক্রেট পড়ার লিংক বা
+                    ডাউনলোডেবল রিসোর্স ফাইলটি লোড হয়েছে! আপনি এটি আজীবন
+                    অ্যাক্সেস করতে পারবেন।
                   </p>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center text-center py-4 space-y-2">
                   <Lock size={20} className="text-[#b36b6b]" />
-                  <p className="text-sm font-medium text-[#2c3e50]">Full Content Locked</p>
-                  <p className="text-xs text-gray-400">Please purchase this ebook to unlock and access the full book materials.</p>
+                  <p className="text-sm font-medium text-[#2c3e50]">
+                    Full Content Locked
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    Please purchase this ebook to unlock and access the full
+                    book materials.
+                  </p>
                 </div>
               )}
             </div>
           </Card.Content>
 
-          {/* ৩. Card.Footer: প্রাইস এবং ডাইনামিক পারচেজ বাটন */}
+          {/* ৩. Card.Footer */}
           <Card.Footer className="px-6 pb-6 pt-4 border-t border-[#ecd5cf]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#fbf4f2]/40 rounded-b-[24px]">
-            {/* প্রাইস এরিয়া */}
             <div className="flex items-center text-[#b36b6b]">
               <DollarSign size={24} className="shrink-0 -mr-1" />
               <span className="text-3xl font-serif font-black tracking-tight">
-                {typeof price === 'number' ? price.toFixed(2) : price}
+                {typeof price === "number" ? price.toFixed(2) : price}
               </span>
-              <span className="text-xs text-gray-400 font-sans font-medium ml-1">USD</span>
+              <span className="text-xs text-gray-400 font-sans font-medium ml-1">
+                USD
+              </span>
             </div>
 
-            {/* ডাইনামিক কন্ডিশনাল পারচেজ বাটন */}
+            {/* বাটন ডিজেবল ও পারচেজ কন্ট্রোল লজিক */}
             {isWriter ? (
-              <Tooltip content="You cannot purchase your own published book" color="danger" closeDelay={100}>
+              <Tooltip
+                content="You cannot purchase your own published book"
+                color="danger"
+                closeDelay={100}
+              >
                 <div>
-                  <Button disabled className="bg-gray-200 text-gray-400 cursor-not-allowed font-medium rounded-xl px-8 h-12">
+                  <Button
+                    isDisabled
+                    className="bg-gray-200 text-gray-400 cursor-not-allowed font-medium rounded-xl px-8 h-12"
+                  >
                     Your Own Book
                   </Button>
                 </div>
               </Tooltip>
             ) : hasPurchased ? (
-              <Button disabled className="bg-emerald-100 text-emerald-700 font-semibold rounded-xl px-8 h-12 cursor-default">
+              <Button
+                isDisabled
+                className="bg-emerald-100 text-emerald-700 font-semibold rounded-xl px-8 h-12 cursor-not-allowed"
+              >
                 Already Purchased
               </Button>
             ) : (
-              <Button
-                // isLoading={purchasing}
-                // onClick={handlePurchase}
-                className="bg-[#b36b6b] hover:bg-[#2c3e50] text-white font-semibold text-md rounded-xl px-8 h-12 shadow-md shadow-[#b36b6b]/10 hover:shadow-xl transition-all duration-300 flex items-center gap-2 w-full sm:w-auto"
-              >
-                <ShoppingCart size={18} />
-                {isLoggedIn ? 'Purchase Now' : 'Login to Purchase'}
-              </Button>
+              <form action="/api/checkout_sessions" method="POST">
+                <input type="hidden" name="book_title" value={title} />
+
+                {/* Stripe Checkout-এ ট্র্যাকিংয়ের জন্য পাঠানো হিডেন ফিল্ডস */}
+                <input type="hidden" name="book_id" value={bookId} />
+                <input type="hidden" name="writer_id" value={bookWriterId} />
+                <input type="hidden" name="price" value={price} />
+                <input type="hidden" name="cover_image" value={coverImage} />
+
+                <section>
+                  <Button
+                    type="submit"
+                    role="link"
+                    className="bg-[#b36b6b] hover:bg-[#2c3e50] text-white font-semibold text-md rounded-xl px-8 h-12 shadow-md shadow-[#b36b6b]/10 hover:shadow-xl transition-all duration-300 flex items-center gap-2 w-full sm:w-auto"
+                  >
+                    <ShoppingCart size={18} />
+                    {isLoggedIn ? "Purchase Now" : "Login to Purchase"}
+                  </Button>
+                </section>
+              </form>
             )}
           </Card.Footer>
-
         </Card>
       </div>
-
     </div>
   );
 }
+
+// "use client";
+
+// import React, { useState } from "react";
+// import Image from "next/image";
+// import Link from "next/link";
+// import { Card, Button, Tooltip } from "@heroui/react";
+// import {
+//   User,
+//   DollarSign,
+//   Calendar,
+//   Tag,
+//   ShieldCheck,
+//   Bookmark,
+//   BookmarkCheck,
+//   ShoppingCart,
+//   Lock,
+//   ArrowUpRight,
+// } from "lucide-react";
+// import { saveBookmark } from "@/lib/actions/bookmark";
+
+// export default function EbookDetailsClient({ book, currentUser }) {
+//   const [isBookmarked, setIsBookmarked] = useState(false);
+//   // const [purchasing, setPurchasing] = useState(false);
+
+//   // console.log(currentUser);
+
+//   // const {
+//   //   id,
+//   //   _id,
+//   //   title = "Untitled Ebook",
+//   //   writerName = "Unknown Author",
+//   //   writerId = "", // রাইটারের আইডি ভ্যালিডেশন
+//   //   price = 0,
+//   //   coverImage = "",
+//   //   description = "",
+//   //   genre = "General",
+//   //   sold = false,
+//   //   createdAt,
+//   //   purchasedUsers = [] // ইতিমধ্যে যারা পারচেজ করেছে তাদের অ্যারে
+//   // } = book || {};
+
+//   // const bookId = _id || id;
+
+//   // // লগইন ও রোল ভিত্তিক রিকোয়ারমেন্ট লজিক
+//   // const isLoggedIn = !!currentUser;
+
+//   // // চেক করা হচ্ছে কারেন্ট ইউজার নিজেই রাইটার কিনা (String conversion সেফটি সহ)
+//   // const isWriter = currentUser && String(currentUser.id) === String(writerId);
+
+//   // // চেক করা হচ্ছে ইউজার অলরেডি কিনেছে কিনা
+//   // const hasPurchased = currentUser && purchasedUsers.map(String).includes(String(currentUser.id));
+
+//   const {
+//     id,
+//     _id,
+//     title = "Untitled Ebook",
+//     writerName = "Unknown Author",
+
+//     // ডাটাবেজের স্কিমা ভেদে সম্ভাব্য সকল রাইটার আইডি ফিল্ডকে ব্যাকআপ হিসেবে নেওয়া হলো
+//     writerId = "",
+//     userId = "",
+//     authorId = "",
+//     user: bookAuthor = null, // যদি পুরো ইউজার অবজেক্ট থাকে
+
+//     price = 0,
+//     coverImage = "",
+//     description = "",
+//     genre = "General",
+//     sold = false,
+//     createdAt,
+//     purchasedUsers = [],
+//   } = book || {};
+
+//   const bookId = _id || id;
+
+//   // ১. লগইন স্টেট চেক
+//   const isLoggedIn = !!currentUser;
+
+//   // ২. আসল রাইটার আইডিটি কোন ফিল্ডে আছে তা ডাইনামিকালি বের করা
+//   const actualWriterId =
+//     writerId || userId || authorId || bookAuthor?._id || bookAuthor?.id || "";
+
+//   // ৩. রাইটার ও পারচেজ কন্ডিশন চেক (String Conversion সেফটি সহ)
+//   const isWriter =
+//     currentUser &&
+//     actualWriterId &&
+//     String(currentUser.id) === String(actualWriterId);
+
+//   // ৪. ইতিমধ্যে কিনেছে কিনা চেক করা
+//   const hasPurchased =
+//     currentUser && purchasedUsers.map(String).includes(String(currentUser.id));
+
+//   const bookmarkData = {
+//     bookId: bookId,
+//     title,
+//     writerName,
+//     price,
+//     coverImage,
+//     genre,
+//     userId: currentUser?.id,
+//   };
+
+//   // ১. বুকমার্ক টগল হ্যান্ডলার
+//   const handleBookmark = async () => {
+//     if (!isLoggedIn) {
+//       alert("Please login to bookmark this book!");
+//       return;
+//     }
+
+//     setIsBookmarked(!isBookmarked);
+
+//     try {
+//       await saveBookmark(bookmarkData);
+//       alert("Bookmarked successfully");
+//     } catch (error) {
+//       console.error("Bookmark saving failed:", error);
+//       setIsBookmarked(false);
+//     }
+//   };
+
+//   // ২. স্ট্রাইপ পারচেজ চেকআউট হ্যান্ডলার
+//   // const handlePurchase = async () => {
+//   //   if (!isLoggedIn) {
+//   //     // লগইন না থাকলে কলব্যাক ইউআরএল সহ সাইন-ইন পেজে রিডাইরেক্ট করবে
+//   //     window.location.href = `/signin?callbackUrl=/ebooks/${bookId}`;
+//   //     return;
+//   //   }
+
+//   //   if (isWriter) {
+//   //     alert("You cannot purchase your own published book.");
+//   //     return;
+//   //   }
+
+//   //   setPurchasing(true);
+//   //   try {
+//   //     const res = await fetch("/api/checkout/stripe", {
+//   //       method: "POST",
+//   //       headers: { "Content-Type": "application/json" },
+//   //       body: JSON.stringify({ bookId }),
+//   //     });
+//   //     const data = await res.json();
+//   //     if (data.url) {
+//   //       window.location.href = data.url; // সাকসেসফুলি স্ট্রাইপ গেটওয়েতে রিডাইরেকশন
+//   //     }
+//   //   } catch (err) {
+//   //     console.error("Stripe integration error:", err);
+//   //   } finally {
+//   //     setPurchasing(false);
+//   //   }
+//   // };
+
+//   const formattedDate = createdAt
+//     ? new Date(createdAt).toLocaleDateString("en-US", {
+//         day: "numeric",
+//         month: "short",
+//         year: "numeric",
+//       })
+//     : "Recent Upload";
+
+//   return (
+//     <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+//       {/* ================= LEFT: HIGH-RES COVER IMAGE ================= */}
+//       <div className="md:col-span-4 sticky top-24">
+//         <div className="relative aspect-[3/4] w-full rounded-[32px] overflow-hidden border border-[#ecd5cf]/60 shadow-md group bg-[#2c3e50]/5">
+//           {coverImage ? (
+//             <Image
+//               src={coverImage}
+//               alt={title}
+//               fill
+//               priority
+//               className="object-cover group-hover:scale-102 transition-transform duration-500"
+//             />
+//           ) : (
+//             <div className="w-full h-full flex items-center justify-center text-gray-400 italic">
+//               No Cover Image
+//             </div>
+//           )}
+
+//           <span
+//             className={`absolute top-5 left-5 z-10 text-[11px] font-bold tracking-wider px-3 py-1 rounded-full uppercase shadow-sm ${
+//               sold ? "bg-[#2c3e50] text-white" : "bg-emerald-600 text-white"
+//             }`}
+//           >
+//             {sold ? "Sold Out" : "Available"}
+//           </span>
+//         </div>
+//       </div>
+
+//       {/* ================= RIGHT: HERO UI COMPOUND CARD DETAILS ================= */}
+//       <div className="md:col-span-8">
+//         <Card className="w-full bg-white border border-[#ecd5cf]/40 rounded-[32px] p-2 shadow-sm">
+//           {/* ১. Card.Header */}
+//           <Card.Header className="px-6 pt-6 pb-2 flex items-center justify-between">
+//             <div className="space-y-1">
+//               <Link
+//                 href={"/dashboard/writer"}
+//                 className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#b36b6b] hover:text-[#2c3e50] transition-colors group"
+//               >
+//                 <User size={20} />
+//                 <span className="text-2xl font-semibold">By {writerName}</span>
+//                 <ArrowUpRight
+//                   size={20}
+//                   className="opacity-0 group-hover:opacity-100 transition-opacity"
+//                 />
+//               </Link>
+
+//               <div className="flex flex-wrap items-center gap-4 text-xs text-gray-400 pt-1">
+//                 <span className="flex items-center gap-1">
+//                   <Tag size={13} /> {genre}
+//                 </span>
+//                 <span className="flex items-center gap-1">
+//                   <Calendar size={13} /> {formattedDate}
+//                 </span>
+//               </div>
+//             </div>
+
+//             <Button
+//               isIconOnly
+//               variant="light"
+//               radius="full"
+//               onClick={handleBookmark}
+//               className={`hover:bg-[#b36b6b]/10 ${isBookmarked ? "text-[#b36b6b]" : "text-gray-400"}`}
+//             >
+//               {isBookmarked ? (
+//                 <BookmarkCheck size={26} className="fill-current" />
+//               ) : (
+//                 <Bookmark size={26} />
+//               )}
+//             </Button>
+//           </Card.Header>
+
+//           {/* ২. Card.Content: ডেসক্রিপশন এবং কন্ডিশনাল সিক্রেট কন্টেন্ট */}
+//           <Card.Content className="px-6 py-4 space-y-6">
+//             <div className="space-y-2">
+//               <Card.Title className="text-3xl md:text-4xl font-serif font-bold text-[#2c3e50] leading-tight">
+//                 {title}
+//               </Card.Title>
+//               <Card.Description className="text-xs text-emerald-600 font-medium flex items-center gap-1">
+//                 <ShieldCheck size={14} /> Verified Premium Digital Edition
+//               </Card.Description>
+//             </div>
+
+//             <div className="space-y-2">
+//               <h4 className="text-sm font-bold uppercase tracking-wider text-[#2c3e50]/70">
+//                 Preview Description
+//               </h4>
+//               <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line bg-[#fbf4f2]/30 p-4 rounded-2xl border border-[#ecd5cf]/20">
+//                 {description || "No description provided for this ebook."}
+//               </p>
+//             </div>
+
+//             {/* রিকোয়ারমেন্ট: পারচেজ সম্পূর্ণ হলে বা রাইটার নিজে হলে ফুল কন্টেন্ট অ্যাক্সেস ওপেন হবে */}
+//             <div className="border border-dashed border-[#ecd5cf] rounded-2xl p-5 bg-[#fbf4f2]/10 relative overflow-hidden">
+//               {hasPurchased || isWriter ? (
+//                 <div className="space-y-2 animate-fadeIn">
+//                   <span className="text-xs font-bold text-emerald-600 uppercase tracking-widest block">
+//                     Unlocked Content
+//                   </span>
+//                   <p className="text-sm text-gray-700 leading-relaxed font-medium">
+//                     ✨ এখানে আপনার ইবুকের আসল এবং সম্পূর্ণ সিক্রেট পড়ার লিংক বা
+//                     ডাউনলোডেবল রিসোর্স ফাইলটি লোড হয়েছে! আপনি এটি আজীবন
+//                     অ্যাক্সেস করতে পারবেন।
+//                   </p>
+//                 </div>
+//               ) : (
+//                 <div className="flex flex-col items-center justify-center text-center py-4 space-y-2">
+//                   <Lock size={20} className="text-[#b36b6b]" />
+//                   <p className="text-sm font-medium text-[#2c3e50]">
+//                     Full Content Locked
+//                   </p>
+//                   <p className="text-xs text-gray-400">
+//                     Please purchase this ebook to unlock and access the full
+//                     book materials.
+//                   </p>
+//                 </div>
+//               )}
+//             </div>
+//           </Card.Content>
+
+//           {/* ৩. Card.Footer: কন্ট্রোলড বাটন এবং গেটওয়ে হ্যান্ডলিং */}
+//           <Card.Footer className="px-6 pb-6 pt-4 border-t border-[#ecd5cf]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#fbf4f2]/40 rounded-b-[24px]">
+//             <div className="flex items-center text-[#b36b6b]">
+//               <DollarSign size={24} className="shrink-0 -mr-1" />
+//               <span className="text-3xl font-serif font-black tracking-tight">
+//                 {typeof price === "number" ? price.toFixed(2) : price}
+//               </span>
+//               <span className="text-xs text-gray-400 font-sans font-medium ml-1">
+//                 USD
+//               </span>
+//             </div>
+
+//             {/* রিকোয়ারমেন্ট অনুযায়ী কন্ডিশনাল অ্যাকশন বাটন */}
+//             {isWriter ? (
+//               <Tooltip
+//                 content="You cannot purchase your own published book"
+//                 color="danger"
+//                 closeDelay={100}
+//               >
+//                 <div>
+//                   <Button
+//                     isDisabled
+//                     className="bg-gray-200 text-gray-400 cursor-not-allowed font-medium rounded-xl px-8 h-12"
+//                   >
+//                     Your Own Book
+//                   </Button>
+//                 </div>
+//               </Tooltip>
+//             ) : hasPurchased ? (
+//               <Button
+//                 isDisabled
+//                 className="bg-emerald-100 text-emerald-700 font-semibold rounded-xl px-8 h-12 cursor-default"
+//               >
+//                 Already Purchased
+//               </Button>
+//             ) : (
+//               <form action="/api/checkout_sessions" method="POST">
+//                 <input type="hidden" name="book_title" value={title} />
+//                 <section>
+//                   <Button
+//                     type="submit"
+//                     role="link"
+//                     // isLoading={purchasing}
+//                     // onClick={handlePurchase}
+//                     className="bg-[#b36b6b] hover:bg-[#2c3e50] text-white font-semibold text-md rounded-xl px-8 h-12 shadow-md shadow-[#b36b6b]/10 hover:shadow-xl transition-all duration-300 flex items-center gap-2 w-full sm:w-auto"
+//                   >
+//                     <ShoppingCart size={18} />
+//                     {isLoggedIn ? "Purchase Now" : "Login to Purchase"}
+//                   </Button>
+//                 </section>
+//               </form>
+//             )}
+//           </Card.Footer>
+//         </Card>
+//       </div>
+//     </div>
+//   );
+// }
