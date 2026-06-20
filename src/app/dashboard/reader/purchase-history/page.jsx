@@ -64,7 +64,7 @@ const PurchaseHistoryPage = async () => {
               Total Spent
             </span>
             <h3 className="text-3xl md:text-4xl font-serif font-black text-[#b36b6b]">
-              {totalExpense.toFixed(2)} <span className="text-sm font-sans font-medium text-gray-400">BDT / USD</span>
+              {totalExpense.toFixed(2)} <span className="text-sm font-sans font-medium text-gray-400"> / USD</span>
             </h3>
           </div>
           <div className="p-4 bg-[#b36b6b]/5 text-[#b36b6b] rounded-2xl group-hover:bg-[#b36b6b] group-hover:text-white transition-all duration-300">

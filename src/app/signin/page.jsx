@@ -77,7 +77,7 @@ const SignInPage = () => {
                             <Label className="text-[#2c3e50] font-medium text-sm mb-1">Email</Label>
                             <Input 
                                 placeholder="john@example.com" 
-                                classNames={{
+                                className={{
                                     inputWrapper: "bg-gray-50 border border-gray-200 focus-within:!border-[#b36b6b] rounded-xl h-11"
                                 }}
                             />
@@ -99,7 +99,7 @@ const SignInPage = () => {
                             </div>
                             <Input 
                                 placeholder="••••••••" 
-                                classNames={{
+                                className={{
                                     inputWrapper: "bg-gray-50 border border-gray-200 focus-within:!border-[#b36b6b] rounded-xl h-11"
                                 }}
                             />
