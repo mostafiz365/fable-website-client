@@ -54,7 +54,7 @@ export default function UserManagementTable({ initialUsers }) {
 
   return (
     <div className="space-y-8 relative">
-      {/* গ্লোবাল লোডিং ওভারলে (ডিলিট হওয়ার সময় কাজ করবে) */}
+      {/* গ্লোবাল লোডিং ওভারলে (ডিলিট হওয়ার সময় কাজ করবে) */}
       {isPending && (
         <div className="fixed inset-0 bg-[#2c3e50]/10 backdrop-blur-[1px] z-50 flex items-center justify-center pointer-events-none">
           <div className="bg-white p-4 rounded-2xl shadow-xl border border-[#ecd5cf]/40 flex items-center gap-3">
@@ -66,47 +66,59 @@ export default function UserManagementTable({ initialUsers }) {
         </div>
       )}
 
-      {/* ================= STATS CARDS ================= */}
+      {/* ================= VIBRANT STATS CARDS ================= */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <Card className="bg-white border border-[#ecd5cf]/30 p-5 rounded-[22px] shadow-sm flex flex-row items-center justify-between">
-          <div className="space-y-0.5">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-              Total Registered
-            </span>
-            <h3 className="text-2xl md:text-3xl font-serif font-black text-[#2c3e50]">
-              {totalUsers}
-            </h3>
-          </div>
-          <div className="p-3 bg-[#fbf4f2] text-[#b36b6b] rounded-xl">
-            <Users size={20} />
-          </div>
-        </Card>
-
-        <Card className="bg-white border border-[#ecd5cf]/30 p-5 rounded-[22px] shadow-sm flex flex-row items-center justify-between">
-          <div className="space-y-0.5">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-              Writers
-            </span>
-            <h3 className="text-2xl md:text-3xl font-serif font-black text-purple-600">
-              {totalWriters}
-            </h3>
-          </div>
-          <div className="p-3 bg-purple-50 text-purple-600 rounded-xl">
-            <UserCheck size={20} />
+        {/* ১. Total Registered Users */}
+        <Card className="bg-gradient-to-br from-[#2c3e50] to-[#1a252f] text-white p-6 rounded-2xl relative overflow-hidden group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border-none min-h-[130px] flex flex-col justify-between">
+          <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/5 rounded-full group-hover:scale-125 transition-transform duration-500 blur-sm" />
+          <div className="flex items-start justify-between w-full">
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-gray-300 uppercase tracking-widest block">
+                Total Registered
+              </span>
+              <h3 className="text-3xl md:text-4xl font-serif font-black tracking-tight drop-shadow-sm">
+                {totalUsers}
+              </h3>
+            </div>
+            <div className="p-3 bg-white/10 text-white rounded-xl shadow-inner mt-0.5">
+              <Users size={22} strokeWidth={2.5} />
+            </div>
           </div>
         </Card>
 
-        <Card className="bg-white border border-[#ecd5cf]/30 p-5 rounded-[22px] shadow-sm flex flex-row items-center justify-between">
-          <div className="space-y-0.5">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-              Admins
-            </span>
-            <h3 className="text-2xl md:text-3xl font-serif font-black text-amber-600">
-              {totalAdmins}
-            </h3>
+        {/* ২. Writers Card */}
+        <Card className="bg-gradient-to-br from-[#b36b6b] to-[#8c5353] text-white p-6 rounded-2xl relative overflow-hidden group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border-none min-h-[130px] flex flex-col justify-between">
+          <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/5 rounded-full group-hover:scale-125 transition-transform duration-500 blur-sm" />
+          <div className="flex items-start justify-between w-full">
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-white/80 uppercase tracking-widest block">
+                Writers
+              </span>
+              <h3 className="text-3xl md:text-4xl font-serif font-black tracking-tight drop-shadow-sm">
+                {totalWriters}
+              </h3>
+            </div>
+            <div className="p-3 bg-white/10 text-white rounded-xl shadow-inner mt-0.5">
+              <UserCheck size={22} strokeWidth={2.5} />
+            </div>
           </div>
-          <div className="p-3 bg-amber-50 text-amber-600 rounded-xl">
-            <Shield size={20} />
+        </Card>
+
+        {/* ৩. Admins Card */}
+        <Card className="bg-gradient-to-br from-amber-500 to-orange-600 text-white p-6 rounded-2xl relative overflow-hidden group hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 border-none min-h-[130px] flex flex-col justify-between">
+          <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/5 rounded-full group-hover:scale-125 transition-transform duration-500 blur-sm" />
+          <div className="flex items-start justify-between w-full">
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-white/80 uppercase tracking-widest block">
+                Admins
+              </span>
+              <h3 className="text-3xl md:text-4xl font-serif font-black tracking-tight drop-shadow-sm">
+                {totalAdmins}
+              </h3>
+            </div>
+            <div className="p-3 bg-white/10 text-white rounded-xl shadow-inner mt-0.5">
+              <Shield size={22} strokeWidth={2.5} />
+            </div>
           </div>
         </Card>
       </div>
@@ -169,7 +181,7 @@ export default function UserManagementTable({ initialUsers }) {
                         </div>
                       </Table.Cell>
 
-                      {/* ৩. Role (এখানে ফুল টেক্সট রিড করে সুন্দর ব্যাজ দেখাবে) */}
+                      {/* ৩. Role */}
                       <Table.Cell className="px-6">
                         <span
                           className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${
@@ -184,7 +196,7 @@ export default function UserManagementTable({ initialUsers }) {
                         </span>
                       </Table.Cell>
 
-                      {/* ৪. Actions (Only Delete Button) */}
+                      {/* ৪. Actions */}
                       <Table.Cell className="px-6 text-center">
                         <div className="flex items-center justify-center">
                           <AlertDialog>
