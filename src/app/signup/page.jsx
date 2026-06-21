@@ -153,7 +153,7 @@ const SignUpPage = () => {
               </Label>
               <Input
                 placeholder="••••••••"
-                classNames={{
+                className={{
                   inputWrapper:
                     "bg-gray-50 border border-gray-200 focus-within:!border-[#b36b6b] rounded-xl h-11",
                 }}

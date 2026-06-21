@@ -28,7 +28,7 @@ export async function DashboardSidebar() {
         // { icon: "LayoutDashboard", href: "/dashboard/admin", label: "Dashboard" },
         { icon: "House", href: "/dashboard/admin", label: "Dashboard Home Page" },
         { icon: "User2", href: "/dashboard/admin/users", label: "Manage Users" },
-        { icon: " Books", href: "/dashboard/admin/all-ebooks", label: "Manage All Ebooks" },
+        { icon: "Books", href: "/dashboard/admin/all-ebooks", label: "Manage All Ebooks" },
         { icon: "GrTransaction", href: "/dashboard/admin/all-transactions", label: "View All Transactions" },
     ];
 
