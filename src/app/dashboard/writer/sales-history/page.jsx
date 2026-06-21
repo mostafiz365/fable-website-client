@@ -8,19 +8,19 @@ import { getUserSession } from "@/lib/core/session";
 const SalesHistoryPage = async () => {
   const user = await getUserSession();
   
-  // ডাটা না থাকলে ক্র্যাশ এড়াতে ফলব্যাক খালি অ্যারে
+  // ডাটা না থাকলে ক্র্যাশ এড়াতে ফলব্যাক খালি অ্যারে
   const salesEbooks = (await getPurchasedBooksByWriter(user?.id)) || [];
 
   /* ================= STATS CALCULATION ================= */
   const totalSalesCount = salesEbooks.length;
   const totalRevenue = salesEbooks.reduce((acc, current) => {
-    // ডাটাবেজের অবজেক্ট অনুযায়ী 'priceAmount' অথবা 'price' থেকে ভ্যালু নেওয়া হচ্ছে
+    // ডাটাবেজের অবজেক্ট অনুযায়ী 'priceAmount' অথবা 'price' থেকে ভ্যালু নেওয়া হচ্ছে
     const amount = current.priceAmount || current.price || 0;
     return acc + Number(amount);
   }, 0);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-8 md:py-10 space-y-8 animate-fadeIn">
+    <div className="w-full max-w-7xl mx-auto px-4 py-8 md:py-10 space-y-10 animate-fadeIn">
       
       {/* ================= 1. HEADER SECTION ================= */}
       <div className="flex flex-col border-b border-[#ecd5cf]/30 pb-5">
@@ -30,52 +30,58 @@ const SalesHistoryPage = async () => {
           </div>
           <div>
             <h2 className="text-2xl md:text-3xl font-serif font-black text-[#2c3e50]">
-              Sales Performance
+              Sales <span className="text-[#b36b6b]">Performance</span>
             </h2>
-            <p className="text-xs md:text-sm text-gray-400 mt-0.5">
+            <p className="text-xs md:text-sm text-gray-500 mt-0.5">
               Monitor your ebook sales, track your earnings, and view buyer insights.
             </p>
           </div>
         </div>
       </div>
 
-      {/* ================= 2. OVERVIEW STATS CARDS ================= */}
+      {/* ================= 2. PREMIUM & VIBRANT OVERVIEW CARDS (USD FIXED) ================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         
         {/* Card 1: Total Books Sold */}
-        <Card className="bg-white border border-[#ecd5cf]/30 p-6 rounded-[24px] shadow-sm flex flex-row items-center justify-between group hover:border-[#b36b6b]/40 transition-all duration-300">
-          <div className="space-y-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-              Total Books Sold
-            </span>
-            <h3 className="text-3xl md:text-4xl font-serif font-black text-[#2c3e50] group-hover:text-[#b36b6b] transition-colors">
-              {totalSalesCount} <span className="text-sm font-sans font-medium text-gray-400">Copies</span>
-            </h3>
-          </div>
-          <div className="p-4 bg-[#fbf4f2] text-[#b36b6b] rounded-2xl group-hover:bg-[#b36b6b] group-hover:text-white transition-all duration-300">
-            <BookCheck size={26} />
+        <Card className="bg-gradient-to-br from-[#2c3e50] to-[#1a252f] text-white p-7 rounded-2xl relative overflow-hidden group hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 border-none min-h-[140px] flex flex-col justify-between">
+          <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/5 rounded-full group-hover:scale-130 transition-transform duration-500 blur-sm" />
+          <div className="flex items-start justify-between w-full">
+            <div className="space-y-3">
+              <span className="text-xs font-bold uppercase tracking-widest text-gray-300 block">
+                Total Books Sold
+              </span>
+              <h3 className="text-3xl md:text-4xl font-serif font-black tracking-tight drop-shadow-sm">
+                {totalSalesCount} <span className="text-sm font-sans font-medium text-gray-400">Copies</span>
+              </h3>
+            </div>
+            <div className="p-3.5 rounded-xl bg-white/10 text-white shrink-0 shadow-inner mt-1">
+              <BookCheck size={24} strokeWidth={2.5} />
+            </div>
           </div>
         </Card>
 
         {/* Card 2: Total Revenue Generated */}
-        <Card className="bg-white border border-[#ecd5cf]/30 p-6 rounded-[24px] shadow-sm flex flex-row items-center justify-between group hover:border-emerald-500/30 transition-all duration-300">
-          <div className="space-y-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-              Total Revenue
-            </span>
-            <h3 className="text-3xl md:text-4xl font-serif font-black text-emerald-600">
-              {totalRevenue.toFixed(2)} <span className="text-sm font-sans font-medium text-gray-400">USD</span>
-            </h3>
-          </div>
-          <div className="p-4 bg-emerald-50 text-emerald-600 rounded-2xl group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-            <BadgeDollarSign size={26} />
+        <Card className="bg-gradient-to-br from-[#b36b6b] to-[#8c5353] text-white p-7 rounded-2xl relative overflow-hidden group hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 border-none min-h-[140px] flex flex-col justify-between">
+          <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/5 rounded-full group-hover:scale-130 transition-transform duration-500 blur-sm" />
+          <div className="flex items-start justify-between w-full">
+            <div className="space-y-3">
+              <span className="text-xs font-bold uppercase tracking-widest text-white/80 block">
+                Total Revenue
+              </span>
+              <h3 className="text-3xl md:text-4xl font-serif font-black tracking-tight drop-shadow-sm">
+                ${totalRevenue.toFixed(2)} <span className="text-sm font-sans font-medium text-white/70">USD</span>
+              </h3>
+            </div>
+            <div className="p-3.5 rounded-xl bg-white/10 text-white shrink-0 shadow-inner mt-1">
+              <BadgeDollarSign size={24} strokeWidth={2.5} />
+            </div>
           </div>
         </Card>
 
       </div>
 
       {/* ================= 3. SALES HISTORY TABLE ================= */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         <h3 className="text-lg font-serif font-bold text-[#2c3e50] flex items-center gap-2 px-1">
           Recent Transactions
         </h3>
@@ -116,7 +122,7 @@ const SalesHistoryPage = async () => {
                           {/* ১. ইবুক কভার ইমেজ + টাইটেল */}
                           <Table.Cell className="px-6">
                             <div className="flex items-center gap-3">
-                              <div className="relative w-10 h-14 rounded-lg overflow-hidden bg-[#2c3e50]/5 border border-[#ecd5cf]/40 shrink-0">
+                              <div className="relative w-10 h-14 rounded-lg overflow-hidden bg-[#2c3e50]/5 border border-[#ecd5cf]/40 shrink-0 shadow-sm">
                                 {sale.bookImage ? (
                                   <Image 
                                     src={sale.bookImage} 
@@ -138,21 +144,21 @@ const SalesHistoryPage = async () => {
                           <Table.Cell className="px-6">
                             <div className="flex items-center gap-2 text-gray-600 text-sm">
                               <User size={15} className="text-gray-400" />
-                              <span className="font-medium">{sale.name || "Anonymous"}</span>
+                              <span className="font-medium capitalize">{sale.name || "Anonymous"}</span>
                             </div>
                           </Table.Cell>
 
                           {/* ৩. পারচেজ ডেট */}
                           <Table.Cell className="px-6">
-                            <div className="flex items-center gap-2 text-gray-400 text-xs md:text-sm">
-                              <Calendar size={14} />
+                            <div className="flex items-center gap-2 text-gray-500 text-xs md:text-sm font-medium">
+                              <Calendar size={14} className="text-gray-400" />
                               <span>{saleDate}</span>
                             </div>
                           </Table.Cell>
 
                           {/* ৪. অ্যামাউন্ট */}
                           <Table.Cell className="px-6 text-right">
-                            <span className="font-sans font-black text-[#2c3e50] text-sm md:text-base">
+                            <span className="font-serif font-bold text-[#b36b6b] text-sm md:text-base">
                               ${Number(sale.priceAmount || sale.price || 0).toFixed(2)}
                             </span>
                           </Table.Cell>
