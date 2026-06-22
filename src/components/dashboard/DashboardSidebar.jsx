@@ -6,7 +6,6 @@ import DashboardNavLink from "./DashboardNavLink";
 export async function DashboardSidebar() {
     const user = await getUserSession();
     
-    // আইকনগুলোকে সরাসরি পাস না করে String/Name হিসেবে দেওয়া হয়েছে
     const writerNavLinks = [
         // { icon: "House", href: "/dashboard/writer", label: "Home" },
         { icon: "Magnifier", href: "/dashboard/writer", label: "Manage Ebooks" },
