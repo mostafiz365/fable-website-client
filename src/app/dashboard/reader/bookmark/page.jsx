@@ -1,13 +1,13 @@
 import BookCard from "@/components/BookCard";
-import { getBookmarkByUserId } from "@/lib/api/bookmark";
 import { getUserSession } from "@/lib/core/session";
+import { serverApi } from "@/lib/core/test";
 import { Bookmark, FolderHeart } from "lucide-react"; // আইকন ব্যবহারের জন্য
 
 const ReaderBookmarkPage = async () => {
     const user = await getUserSession();
     console.log(user);
     // ডাটা না থাকলে যেন ক্র্যাশ না করে সেজন্য একটি ডিফল্ট খালি অ্যারে রাখলাম
-    const books = (await getBookmarkByUserId(user?.id)) || [];
+    const books = (await serverApi(`/api/my/bookmarks?userId=${user?.id}`)) || [];
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4 py-8 md:py-10 space-y-8 animate-fadeIn">

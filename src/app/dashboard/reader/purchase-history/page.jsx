@@ -2,14 +2,14 @@ import React from "react";
 import Image from "next/image";
 import { Table, Card } from "@heroui/react";
 import { ShoppingBag, CreditCard, BookOpen, Calendar, UserCheck } from "lucide-react";
-import { getPurchasedBooksByUser } from "@/lib/api/purchaseBook";
 import { getUserSession } from "@/lib/core/session";
+import { serverApi } from "@/lib/core/test";
 
 const PurchaseHistoryPage = async () => {
   const user = await getUserSession();
   
   // ডাটা না থাকলে ক্র্যাশ এড়াতে ফলব্যাক খালি অ্যারে
-  const purchaseEbooks = (await getPurchasedBooksByUser(user?.id)) || [];
+  const purchaseEbooks = (await serverApi(`/api/purchase/user/${user?.id}`)) || [];
 
   /* ================= STATS CALCULATION ================= */
   const totalPurchasedCount = purchaseEbooks.length;

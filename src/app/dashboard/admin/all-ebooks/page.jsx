@@ -1,12 +1,12 @@
 import React from 'react';
-import { getBooks } from '@/lib/api/books';
 import { getUserSession } from "@/lib/core/session";
 import AdminEbooksTableList from '@/components/dashboard/AdminEbooksTableList';
 import { ShieldCheck } from "lucide-react";
+import { serverApi } from '@/lib/core/test';
 
 const AllEbooksPage = async () => {
     // ১. সমস্ত বই নিয়ে আসা হচ্ছে (স্ট্যাটাস নির্বিশেষে)
-    const books = await getBooks() || [];
+    const books = await serverApi('/api/all-books') || [];
     
     // ২. কারেন্ট লগইন থাকা অ্যাডমিনের সেশন ডাটা নেওয়া হচ্ছে
     const adminUser = await getUserSession();

@@ -1,11 +1,12 @@
 import React from "react";
 import { ShoppingBag, ShieldAlert } from "lucide-react";
-import { getUsers } from "@/lib/api/users"; // পাথটি আপনার ফোল্ডার অনুযায়ী চেক করবেন
 import UserManagementTable from "@/components/UserManagementTable";
+import { serverApi } from "@/lib/core/test";
 
 const AllUsersPage = async () => {
   // ডাটাবেজ থেকে ক্লিন সার্ভার ফেচ
-  const users = (await getUsers()) || [];
+  const users = await serverApi('/api/users') || [];
+  
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 py-8 md:py-10 space-y-8 animate-fadeIn">

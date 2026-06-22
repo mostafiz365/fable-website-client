@@ -1,12 +1,12 @@
 import EbooksTableList from "@/components/dashboard/EbooksTableList";
-import { getBookByUserId } from "@/lib/api/books";
 import { getUserSession } from "@/lib/core/session"; // ক্লায়েন্ট কম্পোনেন্টটি ইমপোর্ট করুন
+import { serverApi } from "@/lib/core/test";
 import { BookOpen } from "lucide-react";
 
 const ManageEbooksPage = async () => {
     const user = await getUserSession();
     // ইউজারের আইডি দিয়ে তার নিজস্ব বইগুলো ফেচ করা হচ্ছে
-    const books = await getBookByUserId(user?.id) || [];
+    const books = await serverApi(`/api/my/books?userId=${user?.id}`) || [];
 
     return (
         <div className="w-full max-w-6xl mx-auto space-y-6 p-4 md:p-6">

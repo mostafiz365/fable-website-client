@@ -1,11 +1,11 @@
-import { getAllPurchasedBooks } from '@/lib/api/purchaseBook';
 import React from 'react';
 import { Landmark } from "lucide-react";
 import TransactionTableList from '@/components/dashboard/TransactionTableList';
+import { serverApi } from '@/lib/core/test';
 
 const AllTransactionPage = async() => {
     // আপনার নিজস্ব এপিআই দিয়ে ডেটা ফেচ করা হচ্ছে
-    const purchaseBooks = await getAllPurchasedBooks() || [];
+    const purchaseBooks = await serverApi('/api/purchase') || [];
 
     return (
         <div className="w-full max-w-6xl mx-auto space-y-6 p-4 md:p-6">

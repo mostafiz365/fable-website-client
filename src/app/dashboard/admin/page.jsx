@@ -1,19 +1,18 @@
 import React from 'react';
-import { getUsers } from '@/lib/api/users';
-import { getBooks } from '@/lib/api/books';
-import { getAllPurchasedBooks } from '@/lib/api/purchaseBook';
 import { LayoutDashboard } from "lucide-react";
 import AdminDashboardClient from '@/components/dashboard/AdminDashboardClient';
+import { serverApi } from '@/lib/core/test';
 
 const DashboardHomePage = async () => {
     // ১. সমস্থ প্রয়োজনীয় এপিআই কল (আপনার দেওয়া লজিক অনুযায়ী)
-    const users = (await getUsers()) || [];
-    const books = (await getBooks()) || [];
-    const purchaseBooks = (await getAllPurchasedBooks()) || [];
+    const users = await serverApi('/api/users');
+    const books = (await serverApi('/api/all-books')) || [];
+    const purchaseBooks = (await serverApi('/api/purchase')) || [];
 
     // ২. অ্যানালিটিক্স কার্ডের ডেটা ক্যালকুলেশন
     const totalUsers = users.length;
     const totalWriters = users.filter(user => user.role === 'writer').length;
+
     const totalEbooksSold = purchaseBooks.length;
     const totalRevenue = purchaseBooks.reduce((sum, item) => sum + (item.priceAmount || 0), 0);
 
