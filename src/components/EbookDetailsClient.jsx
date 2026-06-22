@@ -22,13 +22,13 @@ export default function EbookDetailsClient({ book, currentUser }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
   
 
-  // আপনার ডাটাবেজ স্ট্রাকচার অনুযায়ী ফিল্ডগুলো নেওয়া হলো
+  // আপনার ডাটাবেজ স্ট্রাকচার অনুযায়ী ফিল্ডগুলো নেওয়া হলো
   const {
     _id,
     id,
     title = "Untitled Ebook",
     writerName = "Unknown Author",
-    userId: bookWriterId = "", // আপনার দেওয়া ডাটা অনুযায়ী এই userId-ই হলো লেখকের আইডি
+    userId: bookWriterId = "", // আপনার দেওয়া ডাটা অনুযায়ী এই userId-ই হলো লেখকের আইডি
     price = 0,
     coverImage = "",
     description = "",
@@ -41,7 +41,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
   const bookId = _id || id;
   const isLoggedIn = !!currentUser;
 
-  // ১. চেক করা হচ্ছে কারেন্ট লগইন থাকা ইউজার নিজেই এই বইয়ের লেখক কিনা
+  // ১. চেক করা হচ্ছে কারেন্ট লগইন থাকা ইউজার নিজেই এই বইয়ের লেখক কিনা
   const isWriter =
     currentUser &&
     bookWriterId &&
@@ -219,7 +219,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
               </span>
             </div>
 
-            {/* বাটন ডিজেবল ও পারচেজ কন্ট্রোল লজিক */}
+            {/* বাটন ডিজেবল ও পারচেজ কন্ট্রোল লজিক (লগইন কন্ডিশন আপগ্রেড) */}
             {isWriter ? (
               <Tooltip
                 content="You cannot purchase your own published book"
@@ -242,27 +242,33 @@ export default function EbookDetailsClient({ book, currentUser }) {
               >
                 Already Purchased
               </Button>
-            ) : (
+            ) : isLoggedIn ? (
+              /* ইউজার লগইন থাকলে Stripe পেমেন্ট ফর্মে সাবমিট হবে */
               <form action="/api/checkout_sessions" method="POST">
                 <input type="hidden" name="book_title" value={title} />
-
-                {/* Stripe Checkout-এ ট্র্যাকিংয়ের জন্য পাঠানো হিডেন ফিল্ডস */}
                 <input type="hidden" name="book_id" value={bookId} />
                 <input type="hidden" name="writer_id" value={bookWriterId} />
                 <input type="hidden" name="price" value={price} />
                 <input type="hidden" name="cover_image" value={coverImage} />
 
-                <section>
-                  <Button
-                    type="submit"
-                    role="link"
-                    className="bg-[#b36b6b] hover:bg-[#2c3e50] text-white font-semibold text-md rounded-xl px-8 h-12 shadow-md shadow-[#b36b6b]/10 hover:shadow-xl transition-all duration-300 flex items-center gap-2 w-full sm:w-auto"
-                  >
-                    <ShoppingCart size={18} />
-                    {isLoggedIn ? "Purchase Now" : "Login to Purchase"}
-                  </Button>
-                </section>
+                <Button
+                  type="submit"
+                  role="link"
+                  className="bg-[#b36b6b] hover:bg-[#2c3e50] text-white font-semibold text-md rounded-xl px-8 h-12 shadow-md shadow-[#b36b6b]/10 hover:shadow-xl transition-all duration-300 flex items-center gap-2 w-full sm:w-auto"
+                >
+                  <ShoppingCart size={18} />
+                  Purchase Now
+                </Button>
               </form>
+            ) : (
+              /* ইউজার লগইন না থাকলে সরাসরি Sign In পেজে রিডাইরেক্ট করবে */
+              <Link
+                href="/signin"
+                className="bg-[#b36b6b] hover:bg-[#2c3e50] text-white font-semibold text-md rounded-xl px-8 h-12 shadow-md shadow-[#b36b6b]/10 hover:shadow-xl transition-all duration-300 flex items-center gap-2 w-full sm:w-auto"
+              >
+                <ShoppingCart size={18} />
+                Login to Purchase
+              </Link>
             )}
           </Card.Footer>
         </Card>
@@ -270,6 +276,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
     </div>
   );
 }
+
 
 // "use client";
 
@@ -293,76 +300,38 @@ export default function EbookDetailsClient({ book, currentUser }) {
 
 // export default function EbookDetailsClient({ book, currentUser }) {
 //   const [isBookmarked, setIsBookmarked] = useState(false);
-//   // const [purchasing, setPurchasing] = useState(false);
+  
 
-//   // console.log(currentUser);
-
-//   // const {
-//   //   id,
-//   //   _id,
-//   //   title = "Untitled Ebook",
-//   //   writerName = "Unknown Author",
-//   //   writerId = "", // রাইটারের আইডি ভ্যালিডেশন
-//   //   price = 0,
-//   //   coverImage = "",
-//   //   description = "",
-//   //   genre = "General",
-//   //   sold = false,
-//   //   createdAt,
-//   //   purchasedUsers = [] // ইতিমধ্যে যারা পারচেজ করেছে তাদের অ্যারে
-//   // } = book || {};
-
-//   // const bookId = _id || id;
-
-//   // // লগইন ও রোল ভিত্তিক রিকোয়ারমেন্ট লজিক
-//   // const isLoggedIn = !!currentUser;
-
-//   // // চেক করা হচ্ছে কারেন্ট ইউজার নিজেই রাইটার কিনা (String conversion সেফটি সহ)
-//   // const isWriter = currentUser && String(currentUser.id) === String(writerId);
-
-//   // // চেক করা হচ্ছে ইউজার অলরেডি কিনেছে কিনা
-//   // const hasPurchased = currentUser && purchasedUsers.map(String).includes(String(currentUser.id));
-
+//   // আপনার ডাটাবেজ স্ট্রাকচার অনুযায়ী ফিল্ডগুলো নেওয়া হলো
 //   const {
-//     id,
 //     _id,
+//     id,
 //     title = "Untitled Ebook",
 //     writerName = "Unknown Author",
-
-//     // ডাটাবেজের স্কিমা ভেদে সম্ভাব্য সকল রাইটার আইডি ফিল্ডকে ব্যাকআপ হিসেবে নেওয়া হলো
-//     writerId = "",
-//     userId = "",
-//     authorId = "",
-//     user: bookAuthor = null, // যদি পুরো ইউজার অবজেক্ট থাকে
-
+//     userId: bookWriterId = "", // আপনার দেওয়া ডাটা অনুযায়ী এই userId-ই হলো লেখকের আইডি
 //     price = 0,
 //     coverImage = "",
 //     description = "",
 //     genre = "General",
 //     sold = false,
 //     createdAt,
-//     purchasedUsers = [],
+//     purchasedUsers = [], // ইতিমধ্যে যারা পারচেজ করেছে তাদের আইডি অ্যারে
 //   } = book || {};
 
 //   const bookId = _id || id;
-
-//   // ১. লগইন স্টেট চেক
 //   const isLoggedIn = !!currentUser;
 
-//   // ২. আসল রাইটার আইডিটি কোন ফিল্ডে আছে তা ডাইনামিকালি বের করা
-//   const actualWriterId =
-//     writerId || userId || authorId || bookAuthor?._id || bookAuthor?.id || "";
-
-//   // ৩. রাইটার ও পারচেজ কন্ডিশন চেক (String Conversion সেফটি সহ)
+//   // ১. চেক করা হচ্ছে কারেন্ট লগইন থাকা ইউজার নিজেই এই বইয়ের লেখক কিনা
 //   const isWriter =
 //     currentUser &&
-//     actualWriterId &&
-//     String(currentUser.id) === String(actualWriterId);
+//     bookWriterId &&
+//     String(currentUser.id) === String(bookWriterId);
 
-//   // ৪. ইতিমধ্যে কিনেছে কিনা চেক করা
+//   // ②. চেক করা হচ্ছে কারেন্ট ইউজার অলরেডি বইটি কিনেছে কিনা
 //   const hasPurchased =
 //     currentUser && purchasedUsers.map(String).includes(String(currentUser.id));
 
+//   // বুকমার্ক ডাটা অবজেক্ট (আপনার এক্সিস্টিং লজিক)
 //   const bookmarkData = {
 //     bookId: bookId,
 //     title,
@@ -373,7 +342,6 @@ export default function EbookDetailsClient({ book, currentUser }) {
 //     userId: currentUser?.id,
 //   };
 
-//   // ১. বুকমার্ক টগল হ্যান্ডলার
 //   const handleBookmark = async () => {
 //     if (!isLoggedIn) {
 //       alert("Please login to bookmark this book!");
@@ -390,37 +358,6 @@ export default function EbookDetailsClient({ book, currentUser }) {
 //       setIsBookmarked(false);
 //     }
 //   };
-
-//   // ২. স্ট্রাইপ পারচেজ চেকআউট হ্যান্ডলার
-//   // const handlePurchase = async () => {
-//   //   if (!isLoggedIn) {
-//   //     // লগইন না থাকলে কলব্যাক ইউআরএল সহ সাইন-ইন পেজে রিডাইরেক্ট করবে
-//   //     window.location.href = `/signin?callbackUrl=/ebooks/${bookId}`;
-//   //     return;
-//   //   }
-
-//   //   if (isWriter) {
-//   //     alert("You cannot purchase your own published book.");
-//   //     return;
-//   //   }
-
-//   //   setPurchasing(true);
-//   //   try {
-//   //     const res = await fetch("/api/checkout/stripe", {
-//   //       method: "POST",
-//   //       headers: { "Content-Type": "application/json" },
-//   //       body: JSON.stringify({ bookId }),
-//   //     });
-//   //     const data = await res.json();
-//   //     if (data.url) {
-//   //       window.location.href = data.url; // সাকসেসফুলি স্ট্রাইপ গেটওয়েতে রিডাইরেকশন
-//   //     }
-//   //   } catch (err) {
-//   //     console.error("Stripe integration error:", err);
-//   //   } finally {
-//   //     setPurchasing(false);
-//   //   }
-//   // };
 
 //   const formattedDate = createdAt
 //     ? new Date(createdAt).toLocaleDateString("en-US", {
@@ -502,7 +439,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
 //             </Button>
 //           </Card.Header>
 
-//           {/* ২. Card.Content: ডেসক্রিপশন এবং কন্ডিশনাল সিক্রেট কন্টেন্ট */}
+//           {/* ২. Card.Content */}
 //           <Card.Content className="px-6 py-4 space-y-6">
 //             <div className="space-y-2">
 //               <Card.Title className="text-3xl md:text-4xl font-serif font-bold text-[#2c3e50] leading-tight">
@@ -522,7 +459,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
 //               </p>
 //             </div>
 
-//             {/* রিকোয়ারমেন্ট: পারচেজ সম্পূর্ণ হলে বা রাইটার নিজে হলে ফুল কন্টেন্ট অ্যাক্সেস ওপেন হবে */}
+//             {/* কন্ডিশনাল সিক্রেট কন্টেন্ট লক/আনলক লজিক */}
 //             <div className="border border-dashed border-[#ecd5cf] rounded-2xl p-5 bg-[#fbf4f2]/10 relative overflow-hidden">
 //               {hasPurchased || isWriter ? (
 //                 <div className="space-y-2 animate-fadeIn">
@@ -550,7 +487,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
 //             </div>
 //           </Card.Content>
 
-//           {/* ৩. Card.Footer: কন্ট্রোলড বাটন এবং গেটওয়ে হ্যান্ডলিং */}
+//           {/* ৩. Card.Footer */}
 //           <Card.Footer className="px-6 pb-6 pt-4 border-t border-[#ecd5cf]/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#fbf4f2]/40 rounded-b-[24px]">
 //             <div className="flex items-center text-[#b36b6b]">
 //               <DollarSign size={24} className="shrink-0 -mr-1" />
@@ -562,7 +499,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
 //               </span>
 //             </div>
 
-//             {/* রিকোয়ারমেন্ট অনুযায়ী কন্ডিশনাল অ্যাকশন বাটন */}
+//             {/* বাটন ডিজেবল ও পারচেজ কন্ট্রোল লজিক */}
 //             {isWriter ? (
 //               <Tooltip
 //                 content="You cannot purchase your own published book"
@@ -581,19 +518,24 @@ export default function EbookDetailsClient({ book, currentUser }) {
 //             ) : hasPurchased ? (
 //               <Button
 //                 isDisabled
-//                 className="bg-emerald-100 text-emerald-700 font-semibold rounded-xl px-8 h-12 cursor-default"
+//                 className="bg-emerald-100 text-emerald-700 font-semibold rounded-xl px-8 h-12 cursor-not-allowed"
 //               >
 //                 Already Purchased
 //               </Button>
 //             ) : (
 //               <form action="/api/checkout_sessions" method="POST">
 //                 <input type="hidden" name="book_title" value={title} />
+
+//                 {/* Stripe Checkout-এ ট্র্যাকিংয়ের জন্য পাঠানো হিডেন ফিল্ডস */}
+//                 <input type="hidden" name="book_id" value={bookId} />
+//                 <input type="hidden" name="writer_id" value={bookWriterId} />
+//                 <input type="hidden" name="price" value={price} />
+//                 <input type="hidden" name="cover_image" value={coverImage} />
+
 //                 <section>
 //                   <Button
 //                     type="submit"
 //                     role="link"
-//                     // isLoading={purchasing}
-//                     // onClick={handlePurchase}
 //                     className="bg-[#b36b6b] hover:bg-[#2c3e50] text-white font-semibold text-md rounded-xl px-8 h-12 shadow-md shadow-[#b36b6b]/10 hover:shadow-xl transition-all duration-300 flex items-center gap-2 w-full sm:w-auto"
 //                   >
 //                     <ShoppingCart size={18} />
