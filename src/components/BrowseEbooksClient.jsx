@@ -74,7 +74,6 @@ export default function BrowseEbooksClient({ initialBooks }) {
                     />
                 </div> */}
 
-
         {/* Hero UI v3.1.0 কম্পাউন্ড সিলেক্ট - জেনারে ফিল্টার */}
         <div className="md:col-span-4 flex flex-col gap-2">
           <label className="text-xs font-semibold text-[#2c3e50]/70 uppercase tracking-wider pl-1">

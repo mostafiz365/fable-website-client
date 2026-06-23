@@ -46,11 +46,11 @@ const SignUpPage = () => {
     }
   };
 
-  // const handleGoogle = async() =>{
-  //   await authClient.signIn.social({
-  //     provider: "google",
-  //   });
-  // };
+  const handleGoogle = async() =>{
+    await authClient.signIn.social({
+      provider: "google",
+    });
+  };
 
   return (
     <div className="w-full min-h-[calc(100vh-64px)] bg-[#fbf4f2] flex items-center justify-center py-12 px-4 relative overflow-hidden">
@@ -212,7 +212,7 @@ const SignUpPage = () => {
 
           {/* Google Sign Up Button */}
           <Button
-            // onClick={handleGoogle}
+            onClick={handleGoogle}
             variant="bordered"
             className="rounded-xl w-full h-11 border border-gray-200 hover:bg-gray-50 text-gray-700 font-medium transition-colors mt-1"
           >
