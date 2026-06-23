@@ -28,5 +28,6 @@ export const BOOK_PRICE_ID = {
     'Deep Work' : 'price_1TkNSbLBevfC34C6Ijs7pGPu',
     'Think and Grow Rich' : 'price_1TkNT5LBevfC34C6hsjWb20l',
     'Harry Potter and the Sorcerers Stone' : 'price_1TkNTNLBevfC34C656DLnZ4N',
-    'The Kite Runner' : 'price_1TlMU8LBevfC34C6OUl3xEPl'
+    'The Kite Runner' : 'price_1TlMU8LBevfC34C6OUl3xEPl',
+    'The Silent Patient' : 'price_1TlXzYLBevfC34C6WdITvn7r',
 }
