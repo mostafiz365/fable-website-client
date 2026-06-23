@@ -8,7 +8,6 @@ export const serverApi = async(path) =>{
     const {token} = await auth.api.getToken({
             headers: await headers()
         })
-        console.log(token)
         const res = await fetch(`${baseUrl}${path}`,{
             cache: "no-store",
             headers: {

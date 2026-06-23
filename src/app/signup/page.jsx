@@ -15,6 +15,7 @@ import {
 import Link from "next/link";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -37,12 +38,11 @@ const SignUpPage = () => {
     });
     console.log({ data, error });
     if (data) {
-      //   toast.success('Signup Successfully!'),
+        toast.success('Signup Successfully!'),
       router.push(redirectTo);
     }
     if (error) {
-      // toast.error(error.message);
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 

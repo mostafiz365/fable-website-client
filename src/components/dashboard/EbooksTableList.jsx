@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Table, Switch, Button, Modal, AlertDialog, Surface, TextField, Label, Input } from "@heroui/react";
 import { Edit3, Trash2, Globe, EyeOff, DollarSign, BookOpen } from "lucide-react";
 import { deleteEbook, updateEbookInfo, updateEbookStatus } from "@/lib/actions/books";
+import { toast } from "react-toastify";
 
 
 export default function EbooksTableList({ initialBooks }) {
@@ -25,7 +26,7 @@ export default function EbooksTableList({ initialBooks }) {
             await updateEbookStatus(bookId, updatedStatus);
         } catch (error) {
             console.error("Failed to update status:", error);
-            alert("Could not update status. Reverting change.");
+            toast.error("Could not update status. Reverting change.");
             // এরর হলে আগের স্টেট ফিরিয়ে আনা হচ্ছে
             setBooks(prev => prev.map(b => (b._id === bookId || b.id === bookId) ? { ...b, status: currentStatus } : b));
         }
@@ -55,7 +56,7 @@ export default function EbooksTableList({ initialBooks }) {
             setIsEditOpen(false);
         } catch (error) {
             console.error("Error updating book:", error);
-            alert("Failed to update book information.");
+            toast.error("Failed to update book information.");
         } finally {
             setIsSubmitting(false);
         }
@@ -74,10 +75,11 @@ const handleConfirmDelete = async () => {
         
         // লোকাল স্টেট থেকে ডিলিট হওয়া বইটিকে ফিল্টার করে রিমুভ করা
         setBooks(prev => prev.filter(b => b._id !== targetId && b.id !== targetId));
+        toast.error('Book Delete Successfully!')
         setIsDeleteOpen(false); // ডিলিট মোডাল বন্ধ করা
     } catch (error) {
         console.error("Error deleting book:", error);
-        alert("Failed to delete the ebook. Please try again.");
+        toast.error("Failed to delete the ebook. Please try again.");
     }
 };
 

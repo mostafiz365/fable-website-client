@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Table, Button, AlertDialog, Card } from "@heroui/react";
 import { Trash2, Mail, Users, UserCheck, Shield, Loader2 } from "lucide-react";
 import { deleteUser } from "@/lib/actions/users";
+import { toast } from "react-toastify";
 
 export default function UserManagementTable({ initialUsers }) {
   // ডাটাবেজ থেকে r, w, a আসলে সেটিকে সুন্দর ফুল টেক্সট দেখানোর জন্য স্যানিটাইজেশন
@@ -39,6 +40,7 @@ export default function UserManagementTable({ initialUsers }) {
           setUsers((prev) =>
             prev.filter((user) => user._id !== selectedUser._id),
           );
+          toast.error('User Delete Successfully!')
           setSelectedUser(null);
         }
       } catch (error) {

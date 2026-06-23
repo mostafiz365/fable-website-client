@@ -4,6 +4,7 @@ import { Form, Fieldset, Button } from "@heroui/react";
 import { BookOpen, DollarSign, ImagePlus, FileText, Bookmark, Loader2 } from "lucide-react";
 import { createBook } from "@/lib/actions/books";
 import { redirect } from "next/navigation";
+import { toast } from "react-toastify";
 
 // Hero UI v3 এর ইনপুট ফিল্ড ও থিমিং কাস্টম ক্লাসেস (Fable থিম অনুযায়ী)
 const textInputClass = "w-full bg-[#b36b6b]/5 border border-[#ecd5cf]/60 rounded-xl px-4 py-3 text-sm text-[#2c3e50] placeholder:text-gray-400 focus:outline-none focus:border-[#b36b6b] focus:ring-1 focus:ring-[#b36b6b] transition-all";
@@ -98,14 +99,14 @@ export default function AddEbookForm({ user }) {
             // });
 
             if (res.insertedId) {
-                alert("Ebook successfully published on Fable!");
+                toast.success("Ebook successfully published on Fable!");
                 // ফরম রিসেট
                 e.target.reset();
                 setImageFile(null);
                 setImagePreview("");
                 redirect('/dashboard/writer');
             } else {
-                alert("Failed to save ebook to Database.");
+                toast.info("Failed to save ebook to Database.");
             }
 
         } 

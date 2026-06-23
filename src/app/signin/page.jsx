@@ -4,6 +4,7 @@ import { Button, Card, Description, FieldError, Form, Input, Label, TextField } 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 const SignInPage = () => {
     const router = useRouter();
@@ -24,12 +25,11 @@ const SignInPage = () => {
         
         console.log({ data, error });
         if (data) {
-            // toast.success('Login Successfully!');
+            toast.success('Login Successfully!');
             router.push(redirectTo);
         }
         if (error) {
-            // toast.error(error.message);
-            alert(error.message);
+            toast.error(error.message);
         }
     };
 

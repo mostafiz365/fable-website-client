@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Table, Switch, Button, AlertDialog } from "@heroui/react";
 import { Trash2, Globe, EyeOff, DollarSign, User } from "lucide-react";
 import { adminUpdateEbookStatus, adminDeleteEbook } from "@/lib/actions/books"; // আপনার তৈরি করা ক্লায়েন্ট API
+import { toast } from "react-toastify";
 
 export default function AdminEbooksTableList({ initialBooks, adminEmail }) {
     const [books, setBooks] = useState(initialBooks || []);
@@ -39,6 +40,7 @@ export default function AdminEbooksTableList({ initialBooks, adminEmail }) {
 
             // লোকাল স্টেট থেকে ডিলিট হওয়া বইটি রিমুভ করা
             setBooks(prev => prev.filter(b => b._id !== targetId));
+            toast.error('Book Delete Successfully!')
             setIsDeleteOpen(false); // ডিলিট মোডাল বন্ধ করা
         } catch (error) {
             console.error("Admin error deleting book:", error);

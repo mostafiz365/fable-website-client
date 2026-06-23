@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { CheckCircle2, Mail, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
 import { getUserSession } from '@/lib/core/session'; // আপনার প্রজেক্টের সেশন ম্যানেজার
 import { purchaseBook } from '@/lib/actions/purchaseBook';
+import { toast } from 'react-toastify';
 
 export default async function Success({ searchParams }) {
   const { session_id } = await searchParams;

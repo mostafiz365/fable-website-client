@@ -17,6 +17,7 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { saveBookmark } from "@/lib/actions/bookmark";
+import { toast } from "react-toastify";
 
 export default function EbookDetailsClient({ book, currentUser }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -64,7 +65,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
 
   const handleBookmark = async () => {
     if (!isLoggedIn) {
-      alert("Please login to bookmark this book!");
+      toast.info("Please login to bookmark this book!");
       return;
     }
 
@@ -72,7 +73,7 @@ export default function EbookDetailsClient({ book, currentUser }) {
 
     try {
       await saveBookmark(bookmarkData);
-      alert("Bookmarked successfully");
+      toast.success("Bookmarked successfully");
     } catch (error) {
       console.error("Bookmark saving failed:", error);
       setIsBookmarked(false);
