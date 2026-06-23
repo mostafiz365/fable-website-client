@@ -27,5 +27,6 @@ export const BOOK_PRICE_ID = {
     'Rich Dad Poor Dad' : 'price_1TkNSGLBevfC34C670Cur66a',
     'Deep Work' : 'price_1TkNSbLBevfC34C6Ijs7pGPu',
     'Think and Grow Rich' : 'price_1TkNT5LBevfC34C6hsjWb20l',
-    'Harry Potter and the Sorcerers Stone' : 'price_1TkNTNLBevfC34C656DLnZ4N'
+    'Harry Potter and the Sorcerers Stone' : 'price_1TkNTNLBevfC34C656DLnZ4N',
+    'The Kite Runner' : 'price_1TlMU8LBevfC34C6OUl3xEPl'
 }
