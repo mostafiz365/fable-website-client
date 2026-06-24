@@ -1,36 +1,127 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📚 Fable – Ebook Sharing Platform
 
-## Getting Started
+Fable is a full-stack ebook sharing platform that connects readers, writers, and administrators in a single ecosystem. Readers can browse and purchase ebooks, writers can publish and manage their own ebooks after verification, and administrators can oversee users, ebooks, and transactions. The platform provides a modern, responsive, and user-friendly experience with secure authentication, payment integration, and role-based dashboards.
 
-First, run the development server:
+## 🚀 Live Website
+
+🔗 Live URL: https://fable-website-client.vercel.app
+
+## 🎯 Project Purpose
+
+The main goal of Fable is to create a digital marketplace for original ebooks where:
+
+* Readers can discover, bookmark, and purchase ebooks.
+* Writers can publish and manage their ebook collections.
+* Admins can manage users, ebooks, and transactions.
+* Secure authentication and online payments ensure a reliable user experience.
+
+---
+
+## ✨ Key Features
+
+### 🔐 Authentication & Authorization
+
+* Email & Password Registration/Login
+* Google Authentication
+* JWT-based Authentication
+* Role-based Access Control (User, Writer, Admin)
+* Protected Routes
+
+### 📖 Browse Ebooks
+
+* View all available ebooks
+* Search by title and writer name
+* Filter by genre, price range, and availability
+* Sort by newest, price low-high, and price high-low
+* Pagination support
+
+### 💳 Stripe Payment Integration
+
+* Secure ebook purchase process
+* Stripe Checkout integration
+* Purchase history storage
+* Transaction tracking
+
+### 👤 User Dashboard
+
+* Purchase History
+* Purchased Ebook Gallery
+* Bookmark Management
+* Profile Information
+
+### ✍️ Writer Dashboard
+
+* Add New Ebook
+* Edit Ebook Information
+* Delete Ebook
+* Publish/Unpublish Ebook
+* Sales History
+* Bookmark Management
+
+### 🛠️ Admin Dashboard
+
+* Manage Users
+* Manage All Ebooks
+* Change User Roles
+* View Transactions
+* Analytics Dashboard
+* Revenue & Sales Statistics
+
+
+---
+
+## 🧰 Technologies Used
+
+### Frontend
+
+* Next.js
+* Tailwind CSS
+* HeroUI
+* React Icons
+* React Toastify
+* Recharts
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* JWT Authentication
+
+### Authentication
+
+* Better Auth
+
+### Payment
+
+* Stripe Checkout
+
+---
+
+## 📦 NPM Packages Used
+
+### Client Side
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+react
+react-dom
+framer-motion
+react-hook-form
+react-icons
+react-toastify
+recharts
+tailwindcss
+heroUi
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Server Side
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+express
+mongodb
+jsonwebtoken
+cors
+dotenv
+stripe
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
