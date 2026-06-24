@@ -20,24 +20,24 @@ export const auth = betterAuth({
             clientSecret: process.env.GOOGLE_CLIENT_SECRET, 
         }, 
     },
-    databaseHooks: {
-        user: {
-            create: {
-                before: async (user) => {
-                    return {
-                        data: {
-                            ...user,
-                            role: "reader",
-                        },
-                    };
-                },
-            },
-        },
-    },
+    // databaseHooks: {
+    //     user: {
+    //         create: {
+    //             before: async (user) => {
+    //                 return {
+    //                     data: {
+    //                         ...user,
+    //                         role: "reader",
+    //                     },
+    //                 };
+    //             },
+    //         },
+    //     },
+    // },
   user: {
     additionalFields: {
       role: {
-        default: "seeker"
+        default: "reader"
       }
     }
   },
