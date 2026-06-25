@@ -87,7 +87,7 @@ export default function FableNavbar() {
                 <Link
                   href={link.href}
                   onClick={handleLinkClick}
-                  className={`text-lg font-semibold transition-all duration-300 relative py-2 block ${
+                  className={`text-lg font-semibold transition-all duration-300 relative py-2 block hover:no-underline ${
                     isActive ? "text-[#b36b6b]" : "text-[#2c3e50]/80 dark:text-foreground/80"
                   }`}
                 >
